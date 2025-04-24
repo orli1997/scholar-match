@@ -1,0 +1,41 @@
+.navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  direction: rtl;
+  background-color: #fff;
+  padding: 15px 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  gap: 30px;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 70px; /* מגדיל את הגובה - נסי גם 80px לפי הטעם */
+  margin-right: 20px; /* מזיז את הלוגו ימינה */
+}
+
+
+.brand-text {
+  display: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.nav-links a:hover {
+  color: #7f00ff;
+}
