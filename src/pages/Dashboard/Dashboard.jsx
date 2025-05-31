@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -9,10 +9,17 @@ import {
   Pie,
   Cell,
   ResponsiveContainer,
-  Legend
+  Legend,
 } from "recharts";
+import styles from "./Dashboard.module.css";
+import { useNavigate } from "react-router-dom";
+import { db } from "../../firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const [scholarships, setScholarships] = useState([]);
+
   const dailyUsersData = [
     { day: "ראשון", users: 20 },
     { day: "שני", users: 25 },
@@ -20,143 +27,96 @@ const Dashboard = () => {
     { day: "רביעי", users: 28 },
     { day: "חמישי", users: 35 },
     { day: "שישי", users: 38 },
-    { day: "שבת", users: 30 }
+    { day: "שבת", users: 30 },
   ];
 
-  const pieData = [
-    { name: "מלגה א", value: 400 },
-    { name: "מלגה ב", value: 300 },
-    { name: "מלגה ג", value: 300 },
-    { name: "מלגה ד", value: 200 }
-  ];
+  const COLORS = ["#001a7d", "#3d1dbe", "#7044d9", "#b28eff", "#8ca9ff"];
 
-  const COLORS = ["#001a7d", "#3d1dbe", "#7044d9", "#b28eff"];
+  useEffect(() => {
+    const fetchScholarships = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "scholarships"));
+        const data = querySnapshot.docs.map((doc) => ({
+          name: doc.data().name || "מלגה כללית",
+          value: Math.floor(Math.random() * 400 + 100),
+        }));
+        setScholarships(data);
+      } catch (error) {
+        console.error("שגיאה בשליפת מלגות: ", error);
+      }
+    };
+    fetchScholarships();
+  }, []);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        background: "linear-gradient(to right, #001a7d, #b833e1)",
-        minHeight: "100vh",
-        padding: "40px",
-        fontFamily: "Arial",
-        direction: "rtl"
-      }}
-    >
-      <h1 style={{ color: "white", fontSize: "40px", marginBottom: "20px" }}>
-        דאשבורד
-      </h1>
+    <div className={styles.adminLayout}>
+      <aside className={styles.sidebar}>
+        <h2 className={styles.adminTitle}>Dashboard</h2>
+        <ul>
+          <li className={styles.active}>דאשבורד</li>
+          <li onClick={() => navigate("/admin")}>מלגות</li>
+          <li>משתמשים</li>
+        </ul>
+      </aside>
 
-      <div
-        style={{
-          display: "flex",
-          gap: "30px",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          background: "white",
-          borderRadius: "16px",
-          padding: "30px",
-          width: "90%",
-          maxWidth: "1200px"
-        }}
-      >
-        {/* גרף קו */}
-        <div
-          style={{
-            width: "100%",
-            maxWidth: "500px",
-            border: "1px solid lightgray",
-            borderRadius: "12px",
-            padding: "16px"
-          }}
-        >
-          <h3 style={{ textAlign: "center" }}>מספר משתמשים יומי</h3>
-          <ResponsiveContainer width="100%" height={200}>
-            <LineChart data={dailyUsersData}>
-              <XAxis dataKey="day" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="users" stroke="#001a7d" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+      <div className={styles.dashboardContent}>
+        <h1 className={styles.dashboardTitle}>דאשבורד</h1>
 
-        {/* כרטיסי נתונים */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px",
-            justifyContent: "center"
-          }}
-        >
-          <div
-            style={{
-              background: "#001a7d",
-              color: "white",
-              borderRadius: "12px",
-              padding: "16px",
-              width: "220px",
-              textAlign: "center",
-              border: "1px solid white"
-            }}
-          >
-            <p>משתמשים</p>
-            <h2>1250</h2>
+        <div className={styles.columns}>
+          {/* עמודה שמאלית: ריבועים כחולים */}
+          <div className={styles.leftColumn}>
+            <div className={styles.infoCard}>
+              <p>משתמשים</p>
+              <h2>1250</h2>
+            </div>
+
+            <div className={styles.infoCard}>
+              <p>מספר הגשות למלגות - יומי</p>
+              <h2>367</h2>
+            </div>
           </div>
 
-          <div
-            style={{
-              background: "#001a7d",
-              color: "white",
-              borderRadius: "12px",
-              padding: "16px",
-              width: "220px",
-              textAlign: "center",
-              border: "1px solid white"
-            }}
-          >
-            <p>מספר הגשות למלגות - יומי</p>
-            <h2>367</h2>
-          </div>
-        </div>
+          {/* עמודה ימנית: גרפים */}
+          <div className={styles.rightColumn}>
+            <div className={styles.card}>
+              <h3 className={styles.cardTitle}>מספר משתמשים יומי</h3>
+              <ResponsiveContainer width="100%" height={200}>
+                <LineChart data={dailyUsersData}>
+                  <XAxis dataKey="day" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="users" stroke="#001a7d" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
 
-        {/* תרשים פאי */}
-        <div
-          style={{
-            width: "100%",
-            maxWidth: "500px",
-            border: "1px solid lightgray",
-            borderRadius: "12px",
-            padding: "16px"
-          }}
-        >
-          <h3 style={{ textAlign: "center" }}>המלגה שהגישו אליה הכי הרבה</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                label={({ name }) => name}
-                labelLine={false}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {pieData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend verticalAlign="bottom" height={36} />
-            </PieChart>
-          </ResponsiveContainer>
+            <div className={styles.card}>
+              <h3 className={styles.cardTitle}>המלגה שהגישו אליה הכי הרבה</h3>
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={scholarships}
+                    cx="50%"
+                    cy="50%"
+                    label={({ name }) => name}
+                    labelLine={false}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {scholarships.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend verticalAlign="bottom" height={36} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,98 +1,105 @@
 .adminLayout {
-    display: flex;
-    gap: 2rem;
-    width: 100%;
-  }
-  
-  .sidebar {
-    width: 180px;
-    background: white;
-    padding: 1rem;
-    border-left: 4px solid #000;
-  }
-  
-  .adminTitle {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 1rem;
-  }
-  
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .sidebar li {
-    padding: 0.5rem 0;
-    cursor: pointer;
-  }
-  
-  .sidebar .active {
-    font-weight: bold;
-    border-bottom: 2px solid black;
-  }
-  
-  .content {
-    flex: 1;
-    background: white;
-    border-radius: 20px;
-    padding: 2rem;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .addBtn {
-    background: #2400ff;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .controls {
-    display: flex;
-    gap: 1rem;
-    margin: 1rem 0;
-  }
-  
-  .searchInput,
-  .filterSelect {
-    padding: 0.5rem;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-  }
-  
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .table th,
-  .table td {
-    padding: 0.75rem;
-    border-bottom: 1px solid #ccc;
-    text-align: center;
-  }
-  
-  .editBtn,
-  .deleteBtn {
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
-  .editBtn {
-    background-color: #b7b7ff;
-  }
-  
-  .deleteBtn {
-    background-color: #ffb7b7;
-  }
-  
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  background: linear-gradient(135deg, #d8c2ff, #341c5a); /* רקע סגול */
+  min-height: 100vh;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.sidebar {
+  width: 180px;
+  background: white;
+  padding: 1rem;
+  border-left: 4px solid #000;
+}
+
+.adminTitle {
+  font-size: 28px; 
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 0.5rem 0;
+  cursor: pointer;
+}
+
+.sidebar .active {
+  font-weight: bold;
+  border-bottom: 2px solid black;
+}
+
+.content {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.addBtn {
+  background: #705ded;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.searchInput,
+.filterSelect {
+  padding: 0.5rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+
+.editBtn,
+.deleteBtn {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.editBtn {
+  background-color: #b7b7ff;
+}
+
+.deleteBtn {
+  background-color: #faa1d5;
+}
+.link {
+  text-decoration: none;
+  color: inherit;
+}

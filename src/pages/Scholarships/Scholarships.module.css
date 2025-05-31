@@ -124,4 +124,20 @@
     background-color: #ece6ff;
   }
   
-  
+  .filtersList li:hover {
+  color: #7f00ff;
+  font-weight: bold;
+}
+
+.activeFilter {
+  color: #7f00ff;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.scholarshipCard h4 {
+  font-size: 17px;
+  font-weight: bold;
+  color: #000000;
+  margin-bottom: 0.5rem;
+}

@@ -1,0 +1,86 @@
+.adminLayout {
+  display: flex;
+  width: 100%;
+  background: linear-gradient(135deg, #d8c2ff, #f0e7ff);
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 180px;
+  background: white;
+  padding: 1rem;
+  border-left: 4px solid #000;
+}
+
+.adminTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 0.5rem 0;
+  cursor: pointer;
+}
+
+.sidebar .active {
+  font-weight: bold;
+  border-bottom: 2px solid black;
+}
+
+.dashboardContent {
+  flex: 1;
+  padding: 2rem;
+}
+
+.dashboardTitle {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.columns {
+  display: flex;
+  gap: 3rem;
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.infoCard {
+  background: #001a7d;
+  color: white;
+  border-radius: 12px;
+  padding: 16px;
+  width: 280px;
+  text-align: center;
+  font-size: 18px;
+  border: 1px solid white;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  width: 600px;
+  border: 1px solid #ccc;
+}
+
+.cardTitle {
+  text-align: center;
+  margin-bottom: 10px;
+}
