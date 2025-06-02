@@ -7,7 +7,7 @@ body {
 }
 
 .main-page-layout {
-  width: 100vw;
+  width: 100%; /* ← תוקן מ־100vw */
   min-height: 100vh;
   background: linear-gradient(to right, #001aff, #d951f8);
   display: flex;
@@ -33,4 +33,11 @@ body {
 
 .brand-text {
   display: none;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* חוסם גלילה אופקית */
+  direction: rtl;     /* תמיכה בעברית */
 }

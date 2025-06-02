@@ -1,7 +1,5 @@
-/* Register.module.css – מותאם לעיצוב עמוד המלגות */
-
 .mainPageLayout {
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   background: linear-gradient(to right, #001aff, #d951f8);
   display: flex;
@@ -57,10 +55,13 @@
   font-weight: bold;
 }
 
-.form input {
+.form input,
+.form select {
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
+  font-family: inherit;
+  font-size: 1rem;
   width: 100%;
   box-sizing: border-box;
 }
@@ -87,5 +88,12 @@
   margin-top: 40px;
   font-size: 12px;
   color: #999;
+  text-align: center;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+  font-weight: bold;
   text-align: center;
 }

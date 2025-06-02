@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { useState } from "react";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home/Home";
 import Register from "./pages/Register/Register";
@@ -8,9 +9,10 @@ import Profile from "./pages/Profile/Profile";
 import Help from "./pages/Help/Help";
 import Admin from "./pages/Admin/Admin";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 
 // קומפוננטת Layout כדי לשלוט על הופעת ה-Navbar
-function Layout() {
+function Layout({ userData, setUserData }) {
   const location = useLocation();
   const hideNavbar = location.pathname.startsWith("/admin") || location.pathname.startsWith("/dashboard");
 
@@ -20,22 +22,25 @@ function Layout() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Register setUserData={setUserData} />} />
         <Route path="/scholarships" element={<Scholarships />} />
         <Route path="/scholarships/:id" element={<ScholarshipDetails />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<Profile userData={userData} />} />
         <Route path="/help" element={<Help />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </>
   );
 }
 
 function App() {
+  const [userData, setUserData] = useState(null);
+
   return (
     <Router>
-      <Layout />
+      <Layout userData={userData} setUserData={setUserData} />
     </Router>
   );
 }

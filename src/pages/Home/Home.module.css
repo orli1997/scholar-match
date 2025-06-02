@@ -1,14 +1,13 @@
-/* Home.module.css – מעודכן לפי עיצוב Scholarships */
-
 .mainPageLayout {
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   background: linear-gradient(to right, #001aff, #d951f8);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 2rem;
+  padding-top: 3rem;
+  overflow-x: hidden; /* חוסם תזוזה ימינה-שמאלה */
 }
 
 .pageContentWrapper {
@@ -18,7 +17,7 @@
   display: flex;
   flex-direction: column;
   border-radius: 20px;
-  padding: 2rem 2rem 4rem 2rem;
+  padding: 3rem 2rem 5rem 2rem;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
   direction: rtl;
   min-height: 700px;
@@ -33,6 +32,7 @@
   width: 100%;
   text-align: center;
   box-sizing: border-box;
+  margin-top: 2rem;
 }
 
 .header {
@@ -51,7 +51,7 @@
   font-size: 16px;
   cursor: pointer;
   transition: 0.3s ease;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .searchButton:hover {
@@ -70,11 +70,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
 }
 
 .loginBox input {
-  display: block;
-  margin: 10px auto;
   padding: 10px;
   width: 90%;
   border: 1px solid #ccc;
@@ -84,8 +83,6 @@
 }
 
 .loginBox a {
-  display: block;
-  margin-top: 5px;
   font-size: 14px;
   color: #7f00ff;
   text-decoration: none;
@@ -96,17 +93,31 @@
   color: white;
   border: none;
   padding: 10px 20px;
-  margin-top: 10px;
+  margin-top: 5px;
   border-radius: 10px;
   font-weight: bold;
   cursor: pointer;
+}
+
+.registerLink {
+  background: none;
+  border: none;
+  color: #7f00ff;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 5px;
+  text-decoration: underline;
 }
 
 .separator {
   border: none;
   height: 1px;
   background-color: #ddd;
-  margin: 40px 0;
+  margin: 40px 0 20px;
 }
-
-
+.error {
+  color: red;
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center;
+}

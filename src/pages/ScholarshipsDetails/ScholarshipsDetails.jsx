@@ -1,60 +1,44 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import styles from "./ScholarshipsDetails.module.css";
 import Footer from '../../components/Footer/Footer';
 import SharePopup from "../../components/SharePopup/SharePopup";
-
-const scholarshipsData = [
-  {
-    id: "1",
-    name: "מלגת IMPACT",
-    requirements: "שירות צבאי מלא והמלצות",
-    criteria: "חיילים משוחררים עם מעורבות קהילתית",
-    documents: "תעודת שחרור, המלצות, גיליון ציונים",
-    link: "https://www.fidfimpact.org/"
-  },
-  {
-    id: "2",
-    name: "מלגת פריפריה",
-    requirements: "מגורים באזור פריפריה",
-    criteria: "תושבות בפריפריה והכנסה נמוכה",
-    documents: "תעודת זהות, אישור תושב, אישור הכנסה",
-    link: "https://www.keren-peripheria.gov.il/"
-  },
-  {
-    id: "3",
-    name: "מלגת חנן עינור",
-    requirements: "השתתפות בתכניות קהילתיות",
-    criteria: "סטודנטים מהחברה האתיופית",
-    documents: "תעודת סטודנט, מכתב מוטיבציה",
-    link: "https://kerenaynor.org.il/"
-  },
-  {
-    id: "4",
-    name: "מלגת רוטשילד",
-    requirements: "הצטיינות אקדמית",
-    criteria: "רקע סוציו-אקונומי נמוך והצטיינות",
-    documents: "גיליון ציונים, המלצות, תעודת זהות",
-    link: "https://rothschildfund.org.il/"
-  },
-  {
-    id: "5",
-    name: "מלגת מנהיגי שוליך",
-    requirements: "לימודי STEM והובלה חברתית",
-    criteria: "מצוינות בלימודי הנדסה או מדעים",
-    documents: "תעודת סטודנט, גיליון ציונים, המלצות",
-    link: "https://schulichleaders.com/"
-  }
-];
+import { db } from "../../firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 function ScholarshipDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [scholarship, setScholarship] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
   const [showShare, setShowShare] = useState(false);
 
-  const scholarship = scholarshipsData.find((s) => s.id === id);
+  useEffect(() => {
+    const fetchScholarship = async () => {
+      try {
+        const docRef = doc(db, "scholarships", id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setScholarship({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          setError("לא נמצאה מלגה עם מזהה זה");
+        }
+      } catch (err) {
+        setError("שגיאה בטעינת המלגה");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (!scholarship) return <p>לא נמצאה מלגה</p>;
+    fetchScholarship();
+  }, [id]);
+
+  if (loading) return <p>טוען...</p>;
+  if (error) return <p>{error}</p>;
+  if (!scholarship) return null;
 
   return (
     <div className="main-page-layout">
@@ -80,6 +64,7 @@ function ScholarshipDetails() {
               <button className={styles.applyBtn}>הגש מועמדות</button>
             </a>
             <button className={styles.shareBtn} onClick={() => setShowShare(true)}>↗️ שתף מלגה זאת</button>
+            <button className={styles.backButton} onClick={() => navigate("/scholarships")}> חזור לעמוד הקודם</button>
           </div>
 
           {showShare && (

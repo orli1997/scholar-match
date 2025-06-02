@@ -81,3 +81,20 @@
   font-weight: bold;
   cursor: pointer;
 }
+.backLinkSimple {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 20px;
+  text-decoration: underline;
+  font-weight: bold;
+  transition: color 0.2s;
+}
+
+.backLinkSimple:hover {
+  color: #7f00ff;
+}
+
+

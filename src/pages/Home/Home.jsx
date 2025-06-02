@@ -1,23 +1,37 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import styles from "./Home.module.css";
 import Footer from "../../components/Footer/Footer";
 
 function Home() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    if (username.trim() && password.trim()) {
+  const handleLogin = async () => {
+    if (!username.trim() || !password.trim()) {
+      setErrorMessage("יש להזין שם משתמש וסיסמה");
+      return;
+    }
+
+    const auth = getAuth();
+    try {
+      await signInWithEmailAndPassword(auth, username, password);
       navigate("/scholarships");
-    } else {
-      alert("יש להזין שם משתמש וסיסמה");
+    } catch (error) {
+      console.error("שגיאה בהתחברות:", error);
+      setErrorMessage("שם משתמש או סיסמה שגויים");
     }
   };
 
   const goToRegister = () => {
     navigate("/register");
+  };
+
+  const goToScholarships = () => {
+    navigate("/scholarships");
   };
 
   return (
@@ -26,11 +40,11 @@ function Home() {
         <div className={styles.card}>
           <h1 className={styles.header}>מציאת מלגה שמתאימה לך בקליק</h1>
 
-          <button className={styles.searchButton} onClick={goToRegister}>
-            מצא מלגה בלחיצת כפתור 🔍
+          <button className={styles.searchButton} onClick={goToScholarships}>
+            מצא מלגה בלחיצת כפתור 
           </button>
 
-          <div className={styles.loginBox}>
+          <div className={styles.loginBox} id="login-section">
             <h3>התחברות</h3>
             <input
               type="text"
@@ -44,11 +58,18 @@ function Home() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <a href="#">שכחת סיסמה?</a>
+            <a href="/forgot-password">שכחת סיסמה?</a>
+
+            {errorMessage && (
+              <div className={styles.error}>{errorMessage}</div>
+            )}
+
             <button className={styles.loginBtn} onClick={handleLogin}>
               כניסה
             </button>
-            <a href="#" onClick={goToRegister}>הרשמה</a>
+            <button className={styles.registerLink} onClick={goToRegister}>
+              הרשמה
+            </button>
           </div>
 
           <hr className={styles.separator} />
