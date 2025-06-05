@@ -37,13 +37,11 @@
 
 .dashboardContent {
   flex: 1;
-  padding: 2rem 3rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border-radius: 20px;
-  padding: 2rem;
 }
 
 .dashboardTitle {
@@ -78,7 +76,8 @@
   color: white;
   border-radius: 12px;
   padding: 16px;
-  width: 280px;
+  width: 100%;
+  max-width: 280px;
   text-align: center;
   font-size: 18px;
   border: 1px solid white;
@@ -96,4 +95,33 @@
 .cardTitle {
   text-align: center;
   margin-bottom: 10px;
+}
+
+/* 📱 רספונסיביות למסכים קטנים */
+@media (max-width: 768px) {
+  .adminLayout {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-left: none;
+    border-bottom: 2px solid black;
+    margin-bottom: 1rem;
+  }
+
+  .columns {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 1.5rem;
+  }
+
+  .infoCard {
+    max-width: 100%;
+  }
+
+  .card {
+    max-width: 100%;
+  }
 }

@@ -17,6 +17,8 @@ import { db } from "../../firebase";
 import {
   collection,
   getDocs,
+  doc,
+  getDoc
 } from "firebase/firestore";
 
 const Dashboard = () => {
@@ -62,14 +64,27 @@ const Dashboard = () => {
     setTotalApplications(total);
   };
 
-  // כאן שינוי – תצוגה מזויפת של המלגות הכי מבוקשות
   const fetchMostAppliedScholarships = async () => {
-    const fakeData = [
-      { name: "מלגת חנן עינור", value: 12 },
-      { name: "מלגת רוטשליד", value: 7 },
-      { name: "מלגת גיל למצוינות", value: 5 },
-    ];
-    setScholarships(fakeData);
+    const usersSnapshot = await getDocs(collection(db, "users"));
+    const schMap = {};
+
+    for (const userDoc of usersSnapshot.docs) {
+      const appsSnapshot = await getDocs(collection(db, "users", userDoc.id, "applications"));
+      for (const appDoc of appsSnapshot.docs) {
+        const schId = appDoc.data().scholarshipId;
+        schMap[schId] = (schMap[schId] || 0) + 1;
+      }
+    }
+
+    const result = [];
+    for (const [id, count] of Object.entries(schMap)) {
+      const schSnap = await getDoc(doc(db, "scholarships", id));
+      if (schSnap.exists()) {
+        result.push({ name: schSnap.data().name, value: count });
+      }
+    }
+
+    setScholarships(result);
   };
 
   return (
@@ -79,7 +94,7 @@ const Dashboard = () => {
         <ul>
           <li className={styles.active}>Dashboard</li>
           <li onClick={() => navigate("/admin")}>Admin</li>
-          <li>Users</li>
+          <li onClick={() => navigate("/users")}>Users</li>
         </ul>
       </aside>
 

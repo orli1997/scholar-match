@@ -18,7 +18,7 @@ function getIconFileName(category) {
       return "/assets/icons/volunteer.png";
     case "מגזר":
       return "/assets/icons/gender.png";
-    case "חרדים":
+    case "מצב סוציו אקונימי":
       return "/assets/icons/torah.png";
     case "גיל":
       return "/assets/icons/age.png";
