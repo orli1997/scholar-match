@@ -57,28 +57,25 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
     try {
-      // יצירת משתמש ב-Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       const user = userCredential.user;
 
-      // שמירת פרטי המשתמש ב-Firestore עם תאריך יצירה ותפקיד
       await setDoc(doc(db, "users", user.uid), {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
+        uid: user.uid, // לשימוש עתידי בשליפות
+        fullName: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
         age: formData.age,
         gender: formData.gender,
         field: formData.field,
-        createdAt: serverTimestamp(), // שדה תאריך יצירה
-        role: "user" // תפקיד ברירת מחדל
+        createdAt: serverTimestamp(),
+        role: "user"
       });
 
-      alert(`${formData.firstName}, נרשמת בהצלחה! כעת תוכל להתחבר`);
-      navigate("/#login-section");
+      alert(`${formData.firstName}, נרשמת בהצלחה! כעת תוכלי להתחבר`);
+      navigate("/login"); // עדיף להפנות לדף התחברות ברור
     } catch (error) {
       console.error("שגיאה בהרשמה:", error);
       if (error.code === "auth/email-already-in-use") {
@@ -88,7 +85,7 @@ function Register() {
       } else if (error.code === "auth/weak-password") {
         setError("הסיסמה חלשה מדי. עליך להזין לפחות 6 תווים");
       } else {
-        setError("ארעה שגיאה במהלך ההרשמה. נסה שנית.");
+        setError("ארעה שגיאה במהלך ההרשמה. נסי שנית.");
       }
     }
   };
@@ -115,14 +112,7 @@ function Register() {
             <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
 
             <label>גיל:</label>
-            <input
-              type="number"
-              name="age"
-              value={formData.age}
-              onChange={handleChange}
-              min="18"
-              max="65"
-            />
+            <input type="number" name="age" value={formData.age} onChange={handleChange} min="18" max="65" />
 
             <label>מגדר:</label>
             <select name="gender" value={formData.gender} onChange={handleChange}>

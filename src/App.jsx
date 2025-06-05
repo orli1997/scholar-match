@@ -10,6 +10,9 @@ import Help from "./pages/Help/Help";
 import Admin from "./pages/Admin/Admin";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
+import Login from "./pages/Home/Home"; // אם דף ההתחברות הוא בעצם Home.jsx
+
+<Route path="/login" element={<Home />} />
 
 // קומפוננטת Layout כדי לשלוט על הופעת ה-Navbar
 function Layout({ userData, setUserData }) {
@@ -30,6 +33,7 @@ function Layout({ userData, setUserData }) {
         <Route path="/admin" element={<Admin />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/login" element={<Home />} />
       </Routes>
     </>
   );

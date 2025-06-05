@@ -1,8 +1,10 @@
 .adminLayout {
   display: flex;
   width: 100%;
-  background: linear-gradient(135deg, #d8c2ff, #f0e7ff);
+  background: linear-gradient(135deg, #d8c2ff, #341c5a);
   min-height: 100vh;
+  padding: 2rem;
+  box-sizing: border-box;
 }
 
 .sidebar {
@@ -13,9 +15,9 @@
 }
 
 .adminTitle {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .sidebar ul {
@@ -35,6 +37,12 @@
 
 .dashboardContent {
   flex: 1;
+  padding: 2rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
   padding: 2rem;
 }
 
@@ -42,11 +50,15 @@
   font-size: 32px;
   font-weight: bold;
   margin-bottom: 2rem;
+  color: rgb(4, 1, 9);
 }
 
 .columns {
-  display: flex;
-  gap: 3rem;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: auto auto;
+  gap: 2rem 3rem;
+  align-items: start;
 }
 
 .leftColumn {
@@ -76,7 +88,8 @@
   background: white;
   border-radius: 16px;
   padding: 16px;
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   border: 1px solid #ccc;
 }
 

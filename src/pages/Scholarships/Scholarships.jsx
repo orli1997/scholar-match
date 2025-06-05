@@ -6,13 +6,31 @@ import { auth, db } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
 
-const filters = ["גיל", "מגדר", "מצב סוציו אקונומי", "אזור מגורים", "תחום לימודים"];
+const filters = ["גיל", "מגזר", "מצב סוציו אקונומי", "אזור מגורים", "תחום לימודים"];
+
+function getIconFileName(category) {
+  switch (category) {
+    case "חיילים משוחררים":
+      return "/assets/icons/soldier.png";
+    case "פריפריה":
+      return "/assets/icons/location.png";
+    case "התנדבות":
+      return "/assets/icons/volunteer.png";
+    case "מגזר":
+      return "/assets/icons/gender.png";
+    case "חרדים":
+      return "/assets/icons/torah.png";
+    case "גיל":
+      return "/assets/icons/age.png";
+    default:
+      return "/assets/icons/default.png";
+  }
+}
 
 function Scholarships() {
   const [selectedFilter, setSelectedFilter] = useState("");
   const [query, setQuery] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
   const [scholarshipsData, setScholarshipsData] = useState([]);
   const navigate = useNavigate();
 
@@ -20,10 +38,8 @@ function Scholarships() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsLoggedIn(true);
-        setUserName(user.email); // או טען שם ממשי אם יש
       } else {
         setIsLoggedIn(false);
-        setUserName("");
       }
     });
 
@@ -34,6 +50,10 @@ function Scholarships() {
     const fetchScholarships = async () => {
       const querySnapshot = await getDocs(collection(db, "scholarships"));
       const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+     
+
+      // שמירה למצב
       setScholarshipsData(data);
     };
 
@@ -42,11 +62,6 @@ function Scholarships() {
 
   const handleFilterClick = (filter) => {
     setSelectedFilter(filter);
-  };
-
-  const handleLogout = () => {
-    auth.signOut();
-    navigate("/");
   };
 
   const filteredScholarships = scholarshipsData.filter((s) => {
@@ -78,15 +93,6 @@ function Scholarships() {
         </aside>
 
         <main className={styles.scholarshipMain}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-            {isLoggedIn && <span style={{ fontWeight: "bold" }}>שלום, {userName}!</span>}
-            {isLoggedIn && (
-              <button onClick={handleLogout} style={{ border: "1px solid #ccc", padding: "6px 12px", borderRadius: "6px", background: "white", cursor: "pointer" }}>
-                התנתק
-              </button>
-            )}
-          </div>
-
           <h2 className={styles.pageTitle}>עמוד חיפוש מלגות</h2>
 
           {!isLoggedIn && (
@@ -111,6 +117,11 @@ function Scholarships() {
             {filteredScholarships.length > 0 ? (
               filteredScholarships.map((s) => (
                 <div className={styles.scholarshipCard} key={s.id}>
+                  <img
+                    src={getIconFileName(s.category)}
+                    alt={s.category}
+                    className={styles.icon}
+                  />
                   <h4>🎓 {s.name}</h4>
                   <p>
                     {isLoggedIn ? (

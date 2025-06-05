@@ -82,17 +82,17 @@ function Admin() {
           <ul>
             <li>
               <Link to="/dashboard" className={styles.link}>
-                דאשבורד
+                Dashboard
               </Link>
             </li>
             <li className={styles.active}>
               <Link to="/admin" className={styles.link}>
-                מלגות
+                Admin
               </Link>
             </li>
             <li>
               <Link to="#" className={styles.link}>
-                משתמשים
+                Users
               </Link>
             </li>
           </ul>
@@ -102,7 +102,7 @@ function Admin() {
       {/* Main Content */}
       <div className={styles.content}>
         <div className={styles.header}>
-          <h2>מלגות</h2>
+          <h2> Scholarships</h2>
           <button className={styles.addBtn} onClick={handleAdd}>
             הוסף מלגה ➕
           </button>

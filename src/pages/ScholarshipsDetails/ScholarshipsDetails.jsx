@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import styles from "./ScholarshipsDetails.module.css";
 import Footer from '../../components/Footer/Footer';
 import SharePopup from "../../components/SharePopup/SharePopup";
-import { db } from "../../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase";
+import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 
 function ScholarshipDetails() {
   const { id } = useParams();
@@ -14,7 +14,9 @@ function ScholarshipDetails() {
   const [error, setError] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
   const [showShare, setShowShare] = useState(false);
+  const [user, setUser] = useState(null);
 
+  // שליפת המלגה
   useEffect(() => {
     const fetchScholarship = async () => {
       try {
@@ -36,6 +38,49 @@ function ScholarshipDetails() {
     fetchScholarship();
   }, [id]);
 
+  // בדיקת התחברות + האם המלגה שמורה
+  useEffect(() => {
+    const currentUser = auth.currentUser;
+    setUser(currentUser);
+
+    if (currentUser) {
+      const checkFavorite = async () => {
+        const userRef = doc(db, "users", currentUser.uid);
+        const userSnap = await getDoc(userRef);
+        const saved = userSnap.data()?.savedScholarships || [];
+        setIsFavorite(saved.includes(id));
+      };
+
+      checkFavorite();
+    }
+  }, [id]);
+
+  // שינוי סטטוס מועדף
+  const toggleFavorite = async () => {
+    if (!user) {
+      alert("יש להתחבר כדי לשמור מלגות.");
+      return;
+    }
+
+    const userRef = doc(db, "users", user.uid);
+
+    try {
+      if (isFavorite) {
+        await updateDoc(userRef, {
+          savedScholarships: arrayRemove(id),
+        });
+        setIsFavorite(false);
+      } else {
+        await updateDoc(userRef, {
+          savedScholarships: arrayUnion(id),
+        });
+        setIsFavorite(true);
+      }
+    } catch (error) {
+      console.error("שגיאה בעדכון מועדפים:", error);
+    }
+  };
+
   if (loading) return <p>טוען...</p>;
   if (error) return <p>{error}</p>;
   if (!scholarship) return null;
@@ -46,7 +91,7 @@ function ScholarshipDetails() {
         <div className={styles.scholarshipBox}>
           <div
             className={`${styles.favorite} ${isFavorite ? styles.active : ""}`}
-            onClick={() => setIsFavorite(!isFavorite)}
+            onClick={toggleFavorite}
           >
             <span className={styles.starIcon}>
               {isFavorite ? "★" : "☆"}

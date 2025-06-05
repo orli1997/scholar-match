@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Help.module.css";
 import Footer from "../../components/Footer/Footer";
 
 function Help() {
+  const [showContactInfo, setShowContactInfo] = useState(false);
+
   const handleContactClick = () => {
-    window.location.href = "mailto:support@scholar-match.com";
+    setShowContactInfo(true);
   };
 
   const handleFAQClick = () => {
@@ -29,12 +31,25 @@ function Help() {
             צור קשר ✉️
           </button>
 
+          {showContactInfo && (
+            <div className={styles.contactInfo}>
+              <p>נשמח לעזור! ניתן לפנות אלינו בכתובת:</p>
+              <p>
+                <strong>
+                  <a href="mailto:support@scholar-match.com">
+                    support@scholar-match.com
+                  </a>
+                </strong>
+              </p>
+            </div>
+          )}
+
           <div className={styles.buttonsContainer}>
             <button className={styles.optionButton} onClick={handleFAQClick}>
               שאלות נפוצות
             </button>
             <button className={styles.optionButton} onClick={handleFormsClick}>
-              קישור לדוגמאות לטפסים הנדרשים
+              קישורים לדוגמות טפסים
             </button>
             <button className={styles.optionButton} onClick={handleGuideClick}>
               הגדרות והסבר על המערכת

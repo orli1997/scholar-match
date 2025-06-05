@@ -1,37 +1,51 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import styles from "./Home.module.css";
 import Footer from "../../components/Footer/Footer";
 
 function Home() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const auth = getAuth();
+
+  // אם המשתמש כבר מחובר - ננווט אוטומטית
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/scholarships");
+      }
+    });
+    return () => unsubscribe();
+  }, [auth, navigate]);
 
   const handleLogin = async () => {
-    if (!username.trim() || !password.trim()) {
-      setErrorMessage("יש להזין שם משתמש וסיסמה");
+    setErrorMessage(""); // ננקה שגיאה קודמת
+
+    if (!email.trim() || !password.trim()) {
+      setErrorMessage("יש להזין כתובת מייל וסיסמה");
       return;
     }
 
-    const auth = getAuth();
     try {
-      await signInWithEmailAndPassword(auth, username, password);
+      await signInWithEmailAndPassword(auth, email, password);
       navigate("/scholarships");
     } catch (error) {
       console.error("שגיאה בהתחברות:", error);
-      setErrorMessage("שם משתמש או סיסמה שגויים");
+      switch (error.code) {
+        case "auth/invalid-email":
+          setErrorMessage("כתובת אימייל לא תקינה");
+          break;
+        case "auth/user-not-found":
+        case "auth/wrong-password":
+          setErrorMessage("אימייל או סיסמה שגויים");
+          break;
+        default:
+          setErrorMessage("אירעה שגיאה בהתחברות. נסה שוב.");
+      }
     }
-  };
-
-  const goToRegister = () => {
-    navigate("/register");
-  };
-
-  const goToScholarships = () => {
-    navigate("/scholarships");
   };
 
   return (
@@ -40,17 +54,17 @@ function Home() {
         <div className={styles.card}>
           <h1 className={styles.header}>מציאת מלגה שמתאימה לך בקליק</h1>
 
-          <button className={styles.searchButton} onClick={goToScholarships}>
+          <button className={styles.searchButton} onClick={() => navigate("/scholarships")}>
             מצא מלגה בלחיצת כפתור 
           </button>
 
           <div className={styles.loginBox} id="login-section">
             <h3>התחברות</h3>
             <input
-              type="text"
-              placeholder="שם משתמש"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              placeholder="אימייל"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type="password"
@@ -67,7 +81,7 @@ function Home() {
             <button className={styles.loginBtn} onClick={handleLogin}>
               כניסה
             </button>
-            <button className={styles.registerLink} onClick={goToRegister}>
+            <button className={styles.registerLink} onClick={() => navigate("/register")}>
               הרשמה
             </button>
           </div>
